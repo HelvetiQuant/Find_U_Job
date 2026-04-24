@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 AI Job Buddy - Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .backend-status {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: white;
+            background: #28a745;
+        }
+        
+        .application-form {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+        }
+        
+        .form-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+        
+        .cv-upload-section {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .upload-area:hover {
+            background: #e8ecff;
+            border-color: #5568d3;
+        }
+        
+        .upload-area.dragover {
+            background: #d4dcff;
+            border-color: #4158d0;
+        }
+        
+        .upload-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .file-upload {
+            display: none;
+        }
+        
+        .file-info {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .file-info.show {
+            display: block;
+        }
+        
+        .extracted-cv {
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .extracted-cv.show {
+            display: block;
+        }
+        
+        .extracted-cv h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .extracted-text {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+        
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .job-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-color: #667eea;
+        }
+        
+        .job-title {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .job-company {
+            font-size: 1.2em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .job-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .job-score {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .job-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .status-new {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .status-applied {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .click-hint {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            color: #000;
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .modal-title {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .modal-company {
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .modal-description {
+            margin: 20px 0;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .modal-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+        
+        .modal-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 1.2em;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Job Buddy</h1>
+            <p>La tua piattaforma intelligente per trovare lavoro con l'AI!</p>
+        </div>
+        
+        <div class="backend-status">
+            <h3>🟢 Backend Status: Flask (Porta 8001) - FUNZIONANTE</h3>
+            <div class="status-indicator">✅ Connessione Stabile</div>
+        </div>
+        
+        <div class="stats" id="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalJobs">0</div>
+                <div class="stat-label">Total Jobs</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="appliedJobs">0</div>
+                <div class="stat-label">Applied</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="newJobs">0</div>
+                <div class="stat-label">New</div>
+            </div>
+        </div>
+        
+        <div class="application-form">
+            <h2>📋 Modulo di Candidatura</h2>
+            
+            <!-- Dati Anagrafici -->
+            <div class="form-section">
+                <h3>👤 Dati Anagrafici</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">Nome <span class="required">*</span></label>
+                        <input type="text" id="firstName" class="form-control" placeholder="Mario" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Cognome <span class="required">*</span></label>
+                        <input type="text" id="lastName" class="form-control" placeholder="Rossi" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email <span class="required">*</span></label>
+                        <input type="email" id="email" class="form-control" placeholder="mario.rossi@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefono <span class="required">*</span></label>
+                        <input type="tel" id="phone" class="form-control" placeholder="+39 333 1234567" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="birthDate">Data di Nascita</label>
+                        <input type="date" id="birthDate" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Località <span class="required">*</span></label>
+                        <input type="text" id="location" class="form-control" placeholder="Milano, Italia" required>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CV Upload -->
+            <div class="form-section">
+                <h3>📄 Curriculum Vitae</h3>
+                <div class="upload-area" onclick="document.getElementById('pdfFile').click()">
+                    <div class="upload-icon">📄</div>
+                    <h3>Clicca o trascina qui il tuo CV PDF</h3>
+                    <p>Formati supportati: PDF (max 10MB)</p>
+                    <input type="file" id="pdfFile" class="file-upload" accept=".pdf" onchange="handleFileSelect(event)">
+                </div>
+                
+                <div class="file-info" id="fileInfo">
+                    <strong>📄 File selezionato:</strong> <span id="fileName"></span><br>
+                    <strong>📊 Dimensione:</strong> <span id="fileSize"></span>
+                </div>
+                
+                <div class="extracted-cv" id="extractedCV">
+                    <h4>🤖 Testo estratto dal CV:</h4>
+                    <div class="extracted-text" id="extractedText"></div>
+                </div>
+            </div>
+            
+            <!-- Additional Skills -->
+            <div class="form-section">
+                <h3>🛠️ Additional Skills</h3>
+                <div class="form-group">
+                    <label for="skills">Competenze Tecniche e Soft Skills</label>
+                    <textarea id="skills" class="form-control" placeholder="Elenca le tue competenze principali:&#10;- Linguaggi di programmazione (Python, JavaScript, etc.)&#10;- Framework e librerie&#10;- Strumenti e software&#10;- Soft skills (leadership, comunicazione, etc.)"></textarea>
+                </div>
+            </div>
+            
+            <!-- Presentation Letter -->
+            <div class="form-section">
+                <h3>📝 Lettera di Presentazione</h3>
+                <div class="form-group">
+                    <label for="coverLetter">Lettera di Presentazione</label>
+                    <textarea id="coverLetter" class="form-control" placeholder="Scrivi una breve lettera di presentazione che highlights i tuoi punti di forza e motivazioni...&#10;&#10;Esempio:&#10;Sono un professionista appassionato con X anni di esperienza nel settore...&#10;La mia motivazione a candidarmi per questa posizione deriva da...&#10;Credo di poter contribuire al successo della vostra azienda attraverso..."></textarea>
+                </div>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="loadJobs()">
+                    🔎 Carica Jobs
+                </button>
+                <button class="btn btn-success" onclick="addSampleJob()">
+                    ➕ Aggiungi Job Test
+                </button>
+                <button class="btn btn-secondary" onclick="extractCVText()" id="extractBtn" style="display: none;">
+                    🤖 Estrai Testo CV
+                </button>
+            </div>
+        </div>
+        
+        <div id="message"></div>
+        
+        <div id="loading" class="loading" style="display: none;">
+            🔄 Caricamento in corso...
+        </div>
+        
+        <div id="jobsContainer" class="jobs-grid"></div>
+    </div>
+
+    <!-- Job Detail Modal -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Job Title</h2>
+                <div class="modal-company" id="modalCompany">Company</div>
+            </div>
+            <div class="modal-description" id="modalDescription">
+                Job description will appear here...
+            </div>
+            <div class="modal-meta">
+                <span class="job-score" id="modalScore">Score: 0</span>
+                <span class="job-status" id="modalStatus">NEW</span>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="applyFromModal()">
+                    🚀 Applica con AI
+                </button>
+                <button class="btn btn-success" onclick="closeModal()">
+                    Chiudi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Usa solo Flask backend che funziona
+        const API_BASE = 'http://localhost:8001';
+        let jobs = [];
+        let selectedJobId = null;
+        let uploadedFile = null;
+        
+        // Funzioni di utilità
+        function showMessage(message, type = 'info') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="${type}">${message}</div>`;
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 5000);
+        }
+        
+        function showLoading(show = true) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+        
+        function updateStats() {
+            const totalJobs = jobs.length;
+            const appliedJobs = jobs.filter(job => job[4] === 'applied').length;
+            const newJobs = jobs.filter(job => job[4] === 'new').length;
+            
+            document.getElementById('totalJobs').textContent = totalJobs;
+            document.getElementById('appliedJobs').textContent = appliedJobs;
+            document.getElementById('newJobs').textContent = newJobs;
+        }
+        
+        // File Upload Handling
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validate file type
+            if (file.type !== 'application/pdf') {
+                showMessage('❌ Per favore, seleziona un file PDF', 'error');
+                return;
+            }
+            
+            // Validate file size (10MB max)
+            if (file.size > 10 * 1024 * 1024) {
+                showMessage('❌ Il file è troppo grande. Massimo 10MB', 'error');
+                return;
+            }
+            
+            uploadedFile = file;
+            
+            // Show file info
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('fileInfo').classList.add('show');
+            document.getElementById('extractBtn').style.display = 'inline-block';
+            
+            showMessage('✅ PDF caricato con successo!', 'success');
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Drag and Drop
+        const uploadArea = document.querySelector('.upload-area');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('pdfFile').files = files;
+                handleFileSelect({ target: { files: files } });
+            }
+        });
+        
+        // Extract CV Text from PDF
+        async function extractCVText() {
+            if (!uploadedFile) {
+                showMessage('❌ Nessun file PDF caricato', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const formData = new FormData();
+                formData.append('pdf', uploadedFile);
+                
+                const response = await fetch(`${API_BASE}/extract-cv`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    const extractedText = result.text || '';
+                    
+                    // Show extracted text
+                    document.getElementById('extractedText').textContent = extractedText;
+                    document.getElementById('extractedCV').classList.add('show');
+                    
+                    showMessage('✅ Testo del CV estratto con successo!', 'success');
+                } else {
+                    showMessage('❌ Errore nell\'estrazione del testo dal PDF', 'error');
+                }
+            } catch (error) {
+                showMessage(`❌ Errore: ${error.message}`, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Get applicant data
+        function getApplicantData() {
+            return {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                birthDate: document.getElementById('birthDate').value,
+                location: document.getElementById('location').value,
+                skills: document.getElementById('skills').value,
+                coverLetter: document.getElementById('coverLetter').value,
+                cvText: document.getElementById('extractedText').textContent || ''
+            };
+        }
+        
+        // Validate form
+        function validateForm() {
+            const data = getApplicantData();
+            const errors = [];
+            
+            if (!data.firstName.trim()) errors.push('Nome è obbligatorio');
+            if (!data.lastName.trim()) errors.push('Cognome è obbligatorio');
+            if (!data.email.trim()) errors.push('Email è obbligatoria');
+            if (!data.phone.trim()) errors.push('Telefono è obbligatorio');
+            if (!data.location.trim()) errors.push('Località è obbligatoria');
+            
+            if (errors.length > 0) {
+                showMessage('❌ ' + errors.join(', '), 'error');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Modal Functions
+        function openModal(jobId) {
+            const job = jobs.find(j => j[0] === jobId);
+            if (!job) return;
+            
+            selectedJobId = jobId;
+            
+            document.getElementById('modalTitle').textContent = job[1];
+            document.getElementById('modalCompany').textContent = job[2];
+            document.getElementById('modalDescription').textContent = job[3] || 'Descrizione non disponibile per questa posizione.';
+            document.getElementById('modalScore').textContent = 'Score: ' + job[4];
+            
+            // Fix undefined status handling
+            const jobStatus = job[5] || 'new';
+            document.getElementById('modalStatus').textContent = jobStatus.toUpperCase();
+            document.getElementById('modalStatus').className = 'job-status status-' + jobStatus;
+            
+            document.getElementById('jobModal').classList.add('show');
+        }
+        
+        function closeModal() {
+            document.getElementById('jobModal').classList.remove('show');
+            selectedJobId = null;
+        }
+        
+        function applyFromModal() {
+            if (selectedJobId) {
+                applyToJob(selectedJobId);
+                closeModal();
+            }
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('jobModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // API Functions
+        async function loadJobs() {
+            showLoading(true);
+            
+            try {
+                const response = await fetch(`${API_BASE}/jobs`);
+                if (response.ok) {
+                    jobs = await response.json();
+                    renderJobs();
+                    updateStats();
+                    showMessage(`✅ Caricati ${jobs.length} jobs!`, 'success');
+                } else {
+                    showMessage(`❌ Errore nel caricamento dei jobs: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`❌ Errore di connessione: ${error.message}`, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        async function addSampleJob() {
+            const sampleJob = {
+                title: "AI Engineer",
+                company: "TechCorp",
+                link: "https://example.com/job",
+                description: "Stiamo cercando un AI Engineer talentuoso per unirti al nostro team innovatore. La posizione ideale per chi vuole lavorare su progetti all'avanguardia nel campo dell'intelligenza artificiale.\n\nResponsabilità:\n- Sviluppare e implementare modelli di machine learning\n- Collaborare con il team di data science\n- Ottimizzare algoritmi per performance e scalabilità\n- Partecipare al design di architetture AI\n\nRequisiti:\n- Esperienza con Python, PyTorch/TensorFlow\n- Conoscenza di deep learning e NLP\n- Laurea in Informatica, Ingegneria o campi correlati\n- Passione per l'innovazione tecnologica\n\nOffriamo:\n- Salario competitivo\n- Lavoro flessibile (remote/hybrid)\n- Opportunità di crescita professionale\n- Progetti innovativi e stimolanti"
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/jobs`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(sampleJob)
+                });
+                
+                if (response.ok) {
+                    showMessage('✅ Job di test aggiunto!', 'success');
+                    loadJobs();
+                } else {
+                    showMessage('❌ Errore nell\'aggiungere il job', 'error');
+                }
+            } catch (error) {
+                showMessage(`❌ Errore: ${error.message}`, 'error');
+            }
+        }
+        
+        async function applyToJob(jobId) {
+            // Validate form first
+            if (!validateForm()) {
+                return;
+            }
+            
+            const applicantData = getApplicantData();
+            
+            // Combine all text for AI analysis
+            const fullCV = `
+Nome: ${applicantData.firstName} ${applicantData.lastName}
+Email: ${applicantData.email}
+Telefono: ${applicantData.phone}
+Località: ${applicantData.location}
+Data di Nascita: ${applicantData.birthDate}
+
+CV Text:
+${applicantData.cvText}
+
+Additional Skills:
+${applicantData.skills}
+
+Lettera di Presentazione:
+${applicantData.coverLetter}
+            `.trim();
+            
+            try {
+                const response = await fetch(`${API_BASE}/apply`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        job_id: jobId,
+                        cv: fullCV,
+                        applicant_data: applicantData
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.applied) {
+                        showMessage(`🚀 Applicazione inviata con successo! Score: ${result.score}`, 'success');
+                    } else {
+                        showMessage(`⏭️ Applicazione saltata (score troppo basso): ${result.score}`, 'error');
+                    }
+                    loadJobs();
+                } else {
+                    showMessage('❌ Errore nell\'invio della candidatura', 'error');
+                }
+            } catch (error) {
+                showMessage(`❌ Errore: ${error.message}`, 'error');
+            }
+        }
+        
+        function renderJobs() {
+            const container = document.getElementById('jobsContainer');
+            
+            if (jobs.length === 0) {
+                container.innerHTML = '<div class="loading">Nessun job trovato. Click "Carica Jobs" per iniziare!</div>';
+                return;
+            }
+            
+            container.innerHTML = jobs.map(job => {
+                // Fix undefined status handling
+                const jobStatus = job[5] || 'new';
+                return `
+                <div class="job-card" onclick="openModal(${job[0]})">
+                    <div class="click-hint">👆 Clicca per dettagli</div>
+                    <div class="job-title">💼 ${job[1]}</div>
+                    <div class="job-company">🏢 ${job[2]}</div>
+                    <div class="job-meta">
+                        <span class="job-score">Score: ${job[4]}</span>
+                        <span class="job-status status-${jobStatus}">${jobStatus.toUpperCase()}</span>
+                    </div>
+                    <div class="buttons" style="margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="event.stopPropagation(); applyToJob(${job[0]})" ${jobStatus === 'applied' ? 'disabled' : ''}>
+                            ${jobStatus === 'applied' ? '✅ Già Applicato' : '🚀 Applica con AI'}
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+        
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function () {
+            loadJobs();
+        });
+    </script>
+</body>
+</html>

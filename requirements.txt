@@ -1,0 +1,27 @@
+# ======================================================
+# PRODUCTION DEPENDENCIES
+# ======================================================
+
+# Core Framework
+fastapi==0.128.0
+uvicorn[standard]==0.37.0
+
+# Data & Validation
+pydantic==2.12.5
+requests==2.31.0
+
+# Database
+sqlite3
+
+# PDF Processing
+PyPDF2==3.0.1
+
+# Configuration
+python-dotenv==1.2.1
+
+# Production Server
+gunicorn==21.2.0
+
+# AI/ML (if needed in production)
+# torch
+# transformers
