@@ -18,12 +18,12 @@ app = FastAPI()
 # ======================================================
 # LOCAL AI (OLLAMA REQUIRED)
 # install: https://ollama.com
-# run: ollama run gemma3:270m
+# run: ollama run mistral
 # ======================================================
 
 def local_ai(prompt):
     res = requests.post("http://localhost:11434/api/generate", json={
-        "model": "gemma3:270m",
+        "model": "mistral",
         "prompt": prompt,
         "stream": False
     })

@@ -14,7 +14,7 @@ def local_ai(prompt):
     """Funzione AI locale (dal codice originale)"""
     try:
         res = requests.post("http://localhost:11434/api/generate", json={
-            "model": "gemma3:270m",
+            "model": "mistral",
             "prompt": prompt,
             "stream": False
         })
