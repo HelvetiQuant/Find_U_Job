@@ -1,0 +1,18 @@
+# Render.com Configuration
+# Free tier: Web Service with 512MB RAM, 0.1 CPU
+# Auto-sleep after 15 min inactivity (cold start ~30s)
+
+services:
+  - type: web
+    name: find-u-job-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn src.api.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: PORT
+        value: 8000
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /health

@@ -1,0 +1,25 @@
+# Fly.io Configuration
+# Free tier: 256MB RAM, shared CPU
+# 2340 hours/mese (3 shared-1x VMs)
+# 3GB persistent volume
+
+app = "find-u-job-api"
+primary_region = "lhr"  # London - closest to Switzerland
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
+
+[mounts]
+  source = "data"
+  destination = "/data"

@@ -1,0 +1,22 @@
+# Koyeb Serverless Configuration
+# Free tier: Serverless containers, pay-per-use
+# 1GB RAM, 1 vCPU per service
+# 100GB bandwidth/mese
+
+name: find-u-job-api
+
+services:
+  - name: api
+    ports:
+      - port: 8000
+        http: true
+    routes:
+      - path: /
+    env:
+      - name: PORT
+        value: "8000"
+    
+# Build from Dockerfile
+build:
+  docker:
+    dockerfile: Dockerfile
