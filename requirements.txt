@@ -1,0 +1,44 @@
+# Find U Job - Requirements
+# AI-Powered Job Matching System
+
+# Web Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Data Processing
+numpy==1.24.3
+pandas==2.0.3
+scikit-learn==1.3.0
+
+# NLP & Text Processing
+# spacy==3.7.2  # Optional for local NLP
+# sentence-transformers==2.2.2  # Optional for embeddings
+
+# API & HTTP
+requests==2.31.0
+httpx==0.25.1
+
+# Database
+# sqlalchemy==2.0.23  # Optional for DB
+# redis==5.0.1  # Optional for caching
+
+# ML/AI (Optional - for local AI)
+# transformers==4.35.2
+# torch==2.1.1
+
+# Utils
+pydantic==2.5.0
+python-dotenv==1.0.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.1
+
+# Development
+black==23.11.0
+flake8==6.1.0
+mypy==1.7.0
